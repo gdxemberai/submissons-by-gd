@@ -139,14 +139,14 @@ export default function DepartmentInfo() {
                     </div>
                   </div>
 
-                  <div className="mt-3 flex -space-x-2 overflow-hidden py-1">
+                  <div className="mt-3 flex -space-x-2 py-1">
                     {['S', 'J', 'B', 'B'].map((initial, i) => (
-                      <span
+                      <div
                         key={i}
-                        className="inline-block h-6 w-6 rounded-full bg-neutral-200 ring-2 ring-white flex items-center justify-center text-[10px] font-bold text-neutral-600"
+                        className="h-6 w-6 rounded-full bg-neutral-200 ring-2 ring-white flex items-center justify-center text-[10px] font-bold text-neutral-600 shrink-0"
                       >
                         {initial}
-                      </span>
+                      </div>
                     ))}
                   </div>
                 </div>

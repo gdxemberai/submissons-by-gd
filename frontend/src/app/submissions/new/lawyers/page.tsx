@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
-import Image from 'next/image';
 import Stepper from '@/components/Stepper';
 
 const steps = [
@@ -17,7 +16,6 @@ const steps = [
 interface Lawyer {
   id: string;
   name: string;
-  avatar: string;
   role: string;
   ranking: string;
   yearsOfExp: number;
@@ -26,11 +24,27 @@ interface Lawyer {
   bioStatus: 'complete' | 'needs_review' | 'draft';
 }
 
+const getInitials = (name: string) => {
+  return name.split(' ').map(n => n[0]).join('').toUpperCase();
+};
+
+const getAvatarColor = (name: string) => {
+  const colors = [
+    'bg-blue-100 text-blue-700',
+    'bg-emerald-100 text-emerald-700',
+    'bg-purple-100 text-purple-700',
+    'bg-amber-100 text-amber-700',
+    'bg-rose-100 text-rose-700',
+    'bg-cyan-100 text-cyan-700',
+  ];
+  const index = name.charCodeAt(0) % colors.length;
+  return colors[index];
+};
+
 const initialLawyers: Lawyer[] = [
   {
     id: '1',
     name: 'Sandy Bhogal',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     role: 'Partner',
     ranking: 'Band 1',
     yearsOfExp: 18,
@@ -41,7 +55,6 @@ const initialLawyers: Lawyer[] = [
   {
     id: '2',
     name: 'Marcus Thompson',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     role: 'Partner',
     ranking: 'Band 2',
     yearsOfExp: 15,
@@ -52,7 +65,6 @@ const initialLawyers: Lawyer[] = [
   {
     id: '3',
     name: 'Jennifer Chen',
-    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     role: 'Partner',
     ranking: 'Up & Coming',
     yearsOfExp: 9,
@@ -63,7 +75,6 @@ const initialLawyers: Lawyer[] = [
   {
     id: '4',
     name: 'Robert Williams',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     role: 'Partner',
     ranking: 'Band 2',
     yearsOfExp: 12,
@@ -74,7 +85,6 @@ const initialLawyers: Lawyer[] = [
   {
     id: '5',
     name: 'Lisa Anderson',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     role: 'Associate',
     ranking: 'None',
     yearsOfExp: 5,
@@ -85,7 +95,6 @@ const initialLawyers: Lawyer[] = [
   {
     id: '6',
     name: 'David Park',
-    avatar: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     role: 'Associate',
     ranking: 'None',
     yearsOfExp: 3,
@@ -230,13 +239,9 @@ export default function LawyerInfo() {
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-3">
-                        <Image
-                          src={lawyer.avatar}
-                          alt={lawyer.name}
-                          width={36}
-                          height={36}
-                          className="w-9 h-9 rounded-full object-cover border border-neutral-200"
-                        />
+                        <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold ${getAvatarColor(lawyer.name)}`}>
+                          {getInitials(lawyer.name)}
+                        </div>
                         <span className="text-sm font-medium text-neutral-900">{lawyer.name}</span>
                       </div>
                     </td>
@@ -338,13 +343,9 @@ export default function LawyerInfo() {
             {/* Modal Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100">
               <div className="flex items-center gap-3">
-                <Image
-                  src={selectedLawyer.avatar}
-                  alt={selectedLawyer.name}
-                  width={40}
-                  height={40}
-                  className="w-10 h-10 rounded-full object-cover border border-neutral-200"
-                />
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold ${getAvatarColor(selectedLawyer.name)}`}>
+                  {getInitials(selectedLawyer.name)}
+                </div>
                 <div>
                   <h3 className="font-semibold text-neutral-900">{selectedLawyer.name}</h3>
                   <p className="text-xs text-neutral-500">{selectedLawyer.role}</p>

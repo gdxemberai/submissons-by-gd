@@ -122,14 +122,9 @@ The team is particularly noted for its expertise in private equity transactions,
             {/* Right: AI Coaching */}
             <div className="lg:col-span-1 flex flex-col h-full">
               <div className="bg-gradient-to-br from-indigo-50/50 to-white rounded-xl border border-indigo-100 shadow-sm p-5 h-full relative overflow-hidden">
-                {/* Decorative BG */}
-                <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
-                  <Icon icon="solar:stars-minimalistic-linear" width={100} className="text-indigo-600" />
-                </div>
-
                 <div className="flex items-center gap-2 mb-6">
-                  <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center shadow-indigo-200 shadow-lg">
-                    <Icon icon="solar:magic-stick-3-linear" width={18} />
+                  <div className="w-8 h-8 rounded-lg bg-linear-to-br from-indigo-500 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                    <Icon icon="solar:magic-stick-3-bold" width={16} />
                   </div>
                   <div>
                     <h3 className="font-semibold text-neutral-900 text-sm">AI Coach</h3>

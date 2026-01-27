@@ -1,0 +1,512 @@
+<html lang="en" class="scroll-smooth"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal Submission Automator | Submission Overview</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Newsreader:ital,opsz,wght@1,6..72,300;1,6..72,400;1,6..72,500&amp;display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Iconify Icons -->
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
+    <style>
+      body {
+        background-color: #ffffff;
+        color: #171717;
+        -webkit-font-smoothing: antialiased;
+        font-family: 'Inter', sans-serif;
+      }
+
+      /* Hide scrollbar for main content */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      /* Sidebar Expansion Logic */
+      #sidebar { transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+      #main-wrapper { transition: padding-left 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+
+      body.has-expanded-sidebar #sidebar { width: 16rem; }
+      body.has-expanded-sidebar #main-wrapper { padding-left: 16rem; }
+
+      /* Sidebar Items */
+      body.has-expanded-sidebar #sidebar .sidebar-item {
+        justify-content: flex-start !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+      }
+
+      body.has-expanded-sidebar #sidebar .nav-label {
+        position: static !important;
+        opacity: 1 !important;
+        background-color: transparent !important;
+        color: inherit !important;
+        box-shadow: none !important;
+        padding: 0 0 0 12px !important;
+        pointer-events: auto !important;
+        display: inline-block !important;
+        white-space: nowrap;
+      }
+
+      /* Sidebar Header */
+      #collapse-trigger { display: none; }
+      #expand-trigger { display: flex; opacity: 0; pointer-events: auto; }
+      #logo-wrapper:hover #expand-trigger { opacity: 1; background-color: rgba(255,255,255,0.95); }
+
+      body.has-expanded-sidebar #sidebar-header {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        justify-content: space-between;
+      }
+      body.has-expanded-sidebar #collapse-trigger { display: block; }
+      body.has-expanded-sidebar #expand-trigger { display: none !important; pointer-events: none; }
+      body.has-expanded-sidebar #logo-wrapper { pointer-events: none; }
+
+      /* Sidebar Animations */
+      #sidebar .nav-label { transition: opacity 0s; }
+      #sidebar .sidebar-item:hover .nav-label { transition: opacity 0.3s; }
+      body.has-expanded-sidebar #sidebar .nav-label { transition: opacity 0.3s ease 0.15s !important; }
+      body.has-expanded-sidebar #sidebar-bottom-actions { align-items: stretch !important; }
+      body.has-expanded-sidebar #sidebar-user-profile { margin-left: 1rem; }
+
+      /* Custom Checkbox */
+      .custom-checkbox:checked {
+        background-color: #FF5E00;
+        border-color: #FF5E00;
+      }
+      .custom-checkbox:checked + div {
+        display: block;
+      }
+    </style>
+    <script>
+      function toggleSidebar() {
+        document.body.classList.toggle('has-expanded-sidebar');
+      }
+      function togglePdfPanel() {
+        const panel = document.getElementById('pdf-panel');
+        const backdrop = document.getElementById('pdf-panel-backdrop');
+        if (!panel || !backdrop) return;
+        if (panel.classList.contains('translate-x-full')) {
+          panel.classList.remove('translate-x-full');
+          backdrop.classList.remove('pointer-events-none', 'opacity-0');
+        } else {
+          panel.classList.add('translate-x-full');
+          backdrop.classList.add('pointer-events-none', 'opacity-0');
+        }
+      }
+    </script>
+  </head>
+  <body class="min-h-screen overflow-x-hidden selection:bg-[#FF5E00] selection:text-white relative bg-white text-neutral-900 flex">
+    <!-- Background Animation -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      <div class="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white"></div>
+    </div>
+
+    <!-- Zone 2: Left Sidebar (Global Navigation) -->
+    <nav class="fixed z-50 flex flex-col bg-white/80 w-[72px] border-neutral-100/80 border-r pt-6 pb-6 top-0 bottom-0 left-0 backdrop-blur-xl justify-between" id="sidebar">
+      <div class="flex flex-col items-center gap-6 w-full">
+        <!-- Sidebar Header -->
+        <div id="sidebar-header" class="flex items-center justify-center w-full px-2 min-h-[40px] relative">
+          <div id="logo-wrapper" class="relative flex items-center justify-center w-10 h-10 shrink-0 rounded-xl cursor-pointer bg-gradient-to-br from-neutral-50 to-white border border-neutral-200 shadow-sm">
+            <div class="text-[#FF5E00]">
+              <iconify-icon icon="solar:document-add-linear" width="24" height="24"></iconify-icon>
+            </div>
+            <button onclick="toggleSidebar()" id="expand-trigger" class="absolute inset-0 flex items-center justify-center rounded-xl text-neutral-400 transition-all backdrop-blur-sm">
+              <iconify-icon icon="solar:sidebar-minimalistic-linear" width="20" height="20"></iconify-icon>
+            </button>
+          </div>
+          <button id="collapse-trigger" onclick="toggleSidebar()" class="text-neutral-400 hover:text-neutral-600 transition-colors p-1">
+            <iconify-icon icon="solar:double-alt-arrow-left-linear" width="20" height="20"></iconify-icon>
+          </button>
+        </div>
+
+        <div class="w-8 h-[1px] bg-neutral-100"></div>
+
+        <!-- Nav Items -->
+        <div class="flex flex-col gap-2 w-full px-2">
+          <!-- Dashboard -->
+          <a href="#" class="sidebar-item group relative flex items-center justify-center p-2.5 rounded-lg transition-all text-neutral-400 hover:text-neutral-900 hover:bg-neutral-50">
+            <iconify-icon icon="solar:widget-linear" width="24" height="24" class=""></iconify-icon>
+            <span class="nav-label absolute left-14 px-2 py-1 bg-neutral-900 text-white font-normal rounded opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none z-50 shadow-lg transition-opacity duration-300 text-xs">
+              Dashboard
+            </span>
+          </a>
+          <!-- Submissions (Active) -->
+          <a href="#" class="sidebar-item group relative flex items-center justify-center p-2.5 rounded-lg transition-all text-[#FF5E00] bg-[#FF5E00]/5">
+            <iconify-icon icon="solar:folder-with-files-linear" width="24" height="24" class="text-[#FF5E00]"></iconify-icon>
+            <span class="nav-label absolute left-14 px-2 py-1 bg-neutral-900 text-white font-normal rounded opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none z-50 shadow-lg transition-opacity duration-300 text-xs">
+              Submissions
+            </span>
+          </a>
+          <!-- Config -->
+          <a href="#" class="sidebar-item group relative flex items-center justify-center p-2.5 rounded-lg text-neutral-400 hover:text-neutral-900 hover:bg-neutral-50 transition-all">
+            <iconify-icon icon="solar:settings-linear" width="24" height="24"></iconify-icon>
+            <span class="nav-label absolute left-14 px-2 py-1 bg-neutral-900 text-white font-normal rounded opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none z-50 shadow-lg transition-opacity duration-300 text-xs">
+              Config
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Bottom Actions -->
+      <div class="flex flex-col items-center gap-4 w-full px-2" id="sidebar-bottom-actions">
+        <!-- Profile -->
+        <button class="relative mt-2 w-9 h-9 rounded-full overflow-hidden ring-2 ring-transparent hover:ring-[#FF5E00]/20 transition-all shrink-0" id="sidebar-user-profile">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80" alt="User Profile" class="w-full h-full object-cover">
+        </button>
+      </div>
+    </nav>
+
+    <!-- Content Wrapper (Main) -->
+    <div id="main-wrapper" class="flex flex-1 pl-[72px] transition-all duration-300 h-screen">
+      <!-- Center Stage -->
+      <main class="flex-1 min-w-0 flex flex-col relative z-10 h-full overflow-hidden bg-neutral-50/30">
+        <!-- Header -->
+        <header class="flex-none px-10 py-6 border-b border-neutral-200/50 bg-white/50 backdrop-blur-sm sticky top-0 z-20">
+          <div class="flex flex-col gap-6">
+            <div class="flex items-center justify-between">
+              <div class="flex flex-col gap-1">
+                <div class="flex items-center gap-2 text-xs text-neutral-500 mb-1">
+                  <span class="font-medium text-neutral-900">
+                    Submission Overview
+                  </span>
+                  <iconify-icon icon="solar:alt-arrow-right-linear" width="12"></iconify-icon>
+                  <span>Chambers Global</span>
+                </div>
+                <h1 class="text-xl font-semibold text-neutral-900 tracking-tight flex items-center gap-2">
+                  Corporate M&amp;A
+                  <span class="text-neutral-300">/</span>
+                  <span class="text-neutral-500 font-normal">UK</span>
+                </h1>
+              </div>
+              <div class="flex items-center gap-6">
+                <div class="text-right hidden sm:block">
+                  <div class="text-[10px] font-medium text-neutral-500 uppercase tracking-wider">
+                    Deadline
+                  </div>
+                  <div class="text-sm font-semibold text-neutral-900 font-variant-numeric">
+                    Feb 15, 2026
+                    <span class="text-[#FF5E00] text-xs font-medium ml-1">
+                      (12 days)
+                    </span>
+                  </div>
+                </div>
+                <div class="h-8 w-px bg-neutral-200 hidden sm:block"></div>
+                <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 border border-amber-100 text-xs font-medium">
+                  <div class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></div>
+                  In Progress
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Main Form Content -->
+        <div class="flex-1 overflow-y-auto no-scrollbar px-10 py-8">
+          <div class="max-w-6xl mx-auto space-y-8 pb-20">
+            <div>
+              <h2 class="text-lg font-semibold text-neutral-900 tracking-tight">
+                Submission Sections
+              </h2>
+              <p class="text-sm text-neutral-500 mt-1">
+                Manage and track progress for each section of your submission.
+              </p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div class="lg:col-span-2 flex flex-col gap-4">
+                <div class="group relative flex items-center justify-between p-5 bg-white border border-neutral-200 rounded-xl shadow-sm hover:border-[#FF5E00]/30 hover:shadow-md transition-all cursor-pointer">
+                  <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-green-50 text-green-600 flex items-center justify-center border border-green-100 shrink-0">
+                      <iconify-icon icon="solar:document-text-linear" width="22"></iconify-icon>
+                    </div>
+                    <div>
+                      <h3 class="font-semibold text-neutral-900 text-sm">
+                        Basic Info
+                      </h3>
+                      <p class="text-xs text-neutral-500 mt-0.5">Section A</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-green-50 text-green-700 text-xs font-medium border border-green-100">
+                      <iconify-icon icon="solar:check-circle-bold" width="12"></iconify-icon>
+                      Complete
+                    </span>
+                    <div class="w-px h-8 bg-neutral-100 hidden sm:block"></div>
+                    <button class="w-8 h-8 flex items-center justify-center rounded-full text-neutral-400 group-hover:text-[#FF5E00] group-hover:bg-[#FF5E00]/10 transition-colors">
+                      <iconify-icon icon="solar:pen-linear" width="18"></iconify-icon>
+                    </button>
+                  </div>
+                </div>
+                <div class="group relative flex items-center justify-between p-5 bg-white border border-neutral-200 rounded-xl shadow-sm hover:border-[#FF5E00]/30 hover:shadow-md transition-all cursor-pointer">
+                  <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-green-50 text-green-600 flex items-center justify-center border border-green-100 shrink-0">
+                      <iconify-icon icon="solar:buildings-linear" width="22"></iconify-icon>
+                    </div>
+                    <div>
+                      <h3 class="font-semibold text-neutral-900 text-sm">
+                        Department Info
+                      </h3>
+                      <p class="text-xs text-neutral-500 mt-0.5">
+                        Sections B1-B4, B8
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-green-50 text-green-700 text-xs font-medium border border-green-100">
+                      <iconify-icon icon="solar:check-circle-bold" width="12"></iconify-icon>
+                      Complete
+                    </span>
+                    <div class="w-px h-8 bg-neutral-100 hidden sm:block"></div>
+                    <button class="w-8 h-8 flex items-center justify-center rounded-full text-neutral-400 group-hover:text-[#FF5E00] group-hover:bg-[#FF5E00]/10 transition-colors">
+                      <iconify-icon icon="solar:pen-linear" width="18"></iconify-icon>
+                    </button>
+                  </div>
+                </div>
+                <div class="group relative flex items-center justify-between p-5 bg-white border border-neutral-200 rounded-xl shadow-sm hover:border-[#FF5E00]/30 hover:shadow-md transition-all cursor-pointer">
+                  <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-green-50 text-green-600 flex items-center justify-center border border-green-100 shrink-0">
+                      <iconify-icon icon="solar:users-group-rounded-linear" width="22"></iconify-icon>
+                    </div>
+                    <div>
+                      <h3 class="font-semibold text-neutral-900 text-sm">
+                        Lawyer Information
+                      </h3>
+                      <div class="flex items-center gap-2 mt-0.5">
+                        <span class="text-xs text-neutral-500">
+                          Section B6, B9
+                        </span>
+                        <span class="w-1 h-1 rounded-full bg-neutral-300"></span>
+                        <span class="text-xs text-neutral-700 font-medium">
+                          6 Lawyers
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-green-50 text-green-700 text-xs font-medium border border-green-100">
+                      <iconify-icon icon="solar:check-circle-bold" width="12"></iconify-icon>
+                      Complete
+                    </span>
+                    <div class="w-px h-8 bg-neutral-100 hidden sm:block"></div>
+                    <button class="w-8 h-8 flex items-center justify-center rounded-full text-neutral-400 group-hover:text-[#FF5E00] group-hover:bg-[#FF5E00]/10 transition-colors">
+                      <iconify-icon icon="solar:pen-linear" width="18"></iconify-icon>
+                    </button>
+                  </div>
+                </div>
+                <div class="group relative flex items-center justify-between p-5 bg-white border border-neutral-200 rounded-xl shadow-sm hover:border-[#FF5E00]/30 hover:shadow-md transition-all cursor-pointer">
+                  <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-green-50 text-green-600 flex items-center justify-center border border-green-100 shrink-0">
+                      <iconify-icon icon="solar:graph-up-linear" width="22"></iconify-icon>
+                    </div>
+                    <div>
+                      <h3 class="font-semibold text-neutral-900 text-sm">
+                        Practice Overview
+                      </h3>
+                      <div class="flex items-center gap-2 mt-0.5">
+                        <span class="text-xs text-neutral-500">
+                          Section B10
+                        </span>
+                        <span class="w-1 h-1 rounded-full bg-neutral-300"></span>
+                        <span class="text-xs text-neutral-700 font-medium">
+                          487 words
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-green-50 text-green-700 text-xs font-medium border border-green-100">
+                      <iconify-icon icon="solar:check-circle-bold" width="12"></iconify-icon>
+                      Complete
+                    </span>
+                    <div class="w-px h-8 bg-neutral-100 hidden sm:block"></div>
+                    <button class="w-8 h-8 flex items-center justify-center rounded-full text-neutral-400 group-hover:text-[#FF5E00] group-hover:bg-[#FF5E00]/10 transition-colors">
+                      <iconify-icon icon="solar:pen-linear" width="18"></iconify-icon>
+                    </button>
+                  </div>
+                </div>
+                <div class="group relative flex items-center justify-between p-5 bg-white border border-neutral-200 rounded-xl shadow-sm hover:border-[#FF5E00]/30 hover:shadow-md transition-all cursor-pointer">
+                  <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-green-50 text-green-600 flex items-center justify-center border border-green-100 shrink-0">
+                      <iconify-icon icon="solar:user-hand-up-linear" width="22"></iconify-icon>
+                    </div>
+                    <div>
+                      <h3 class="font-semibold text-neutral-900 text-sm">
+                        Client Lists
+                      </h3>
+                      <div class="flex items-center gap-2 mt-0.5">
+                        <span class="text-xs text-neutral-500">
+                          Section D0, E0
+                        </span>
+                        <span class="w-1 h-1 rounded-full bg-neutral-300"></span>
+                        <span class="text-xs text-neutral-700 font-medium">
+                          8 publishable, 5 confidential
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-green-50 text-green-700 text-xs font-medium border border-green-100">
+                      <iconify-icon icon="solar:check-circle-bold" width="12"></iconify-icon>
+                      Complete
+                    </span>
+                    <div class="w-px h-8 bg-neutral-100 hidden sm:block"></div>
+                    <button class="w-8 h-8 flex items-center justify-center rounded-full text-neutral-400 group-hover:text-[#FF5E00] group-hover:bg-[#FF5E00]/10 transition-colors">
+                      <iconify-icon icon="solar:pen-linear" width="18"></iconify-icon>
+                    </button>
+                  </div>
+                </div>
+                <div class="group relative flex items-center justify-between p-5 bg-amber-50/50 border border-amber-200 rounded-xl shadow-sm hover:border-amber-300 hover:bg-amber-50 transition-all cursor-pointer ring-1 ring-amber-100">
+                  <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center border border-amber-200 shrink-0">
+                      <iconify-icon icon="solar:case-minimalistic-linear" width="22"></iconify-icon>
+                    </div>
+                    <div>
+                      <h3 class="font-semibold text-neutral-900 text-sm">
+                        Matters
+                      </h3>
+                      <div class="flex flex-wrap items-center gap-x-2 gap-y-1 mt-0.5">
+                        <span class="text-xs text-neutral-500">
+                          Sections D1-D9, E1-E9
+                        </span>
+                        <span class="w-1 h-1 rounded-full bg-neutral-300 hidden sm:block"></span>
+                        <span class="text-xs text-neutral-700 font-medium">
+                          7 publishable, 5 confidential
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-100 text-amber-700 text-xs font-medium border border-amber-200 whitespace-nowrap">
+                      <iconify-icon icon="solar:danger-circle-bold" width="12"></iconify-icon>
+                      2 Issues
+                    </span>
+                    <div class="w-px h-8 bg-amber-200 hidden sm:block"></div>
+                    <button class="w-8 h-8 flex items-center justify-center rounded-full text-amber-600 bg-amber-100/50 group-hover:bg-amber-200/50 transition-colors">
+                      <iconify-icon icon="solar:pen-linear" width="18"></iconify-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="lg:col-span-1 flex flex-col gap-6">
+                <div class="bg-white rounded-xl border border-neutral-200 shadow-sm p-5">
+                  <h3 class="font-semibold text-neutral-900 text-sm mb-4">
+                    Quick Actions
+                  </h3>
+                  <div class="flex flex-col gap-2">
+                    <button onclick="togglePdfPanel()" class="flex items-center gap-3 w-full p-2.5 rounded-lg hover:bg-neutral-50 border border-transparent hover:border-neutral-100 text-sm text-neutral-600 hover:text-neutral-900 transition-all text-left group">
+                      <div class="w-8 h-8 rounded bg-neutral-50 group-hover:bg-white text-neutral-500 group-hover:text-[#FF5E00] flex items-center justify-center border border-neutral-100 transition-colors">
+                        <iconify-icon icon="solar:eye-linear" width="18"></iconify-icon>
+                      </div>
+                      <span class="font-medium">View PDF</span>
+                    </button>
+                    <button class="flex items-center gap-3 w-full p-2.5 rounded-lg hover:bg-neutral-50 border border-transparent hover:border-neutral-100 text-sm text-neutral-600 hover:text-neutral-900 transition-all text-left group">
+                      <div class="w-8 h-8 rounded bg-neutral-50 group-hover:bg-white text-neutral-500 group-hover:text-blue-600 flex items-center justify-center border border-neutral-100 transition-colors">
+                        <iconify-icon icon="solar:file-text-linear" width="18"></iconify-icon>
+                      </div>
+                      <span class="font-medium">Export to Word</span>
+                    </button>
+                    <button class="flex items-center gap-3 w-full p-2.5 rounded-lg hover:bg-neutral-50 border border-transparent hover:border-neutral-100 text-sm text-neutral-600 hover:text-neutral-900 transition-all text-left group">
+                      <div class="w-8 h-8 rounded bg-neutral-50 group-hover:bg-white text-neutral-500 group-hover:text-purple-600 flex items-center justify-center border border-neutral-100 transition-colors">
+                        <iconify-icon icon="solar:refresh-circle-linear" width="18"></iconify-icon>
+                      </div>
+                      <span class="font-medium">Convert to Legal 500</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="bg-amber-50 rounded-xl border border-amber-100 p-5">
+                  <div class="flex items-center gap-2 mb-4">
+                    <iconify-icon icon="solar:bell-bing-bold" class="text-amber-600"></iconify-icon>
+                    <h3 class="font-semibold text-amber-900 text-sm">
+                      Attention Needed
+                    </h3>
+                  </div>
+                  <div class="flex flex-col gap-3">
+                    <div class="flex gap-3 items-start">
+                      <iconify-icon icon="solar:danger-triangle-linear" class="text-amber-600 shrink-0 mt-0.5" width="16"></iconify-icon>
+                      <div>
+                        <p class="text-xs font-medium text-amber-900">
+                          Matter 3
+                        </p>
+                        <p class="text-[11px] text-amber-700 leading-tight">
+                          Missing press links. Verification required.
+                        </p>
+                      </div>
+                    </div>
+                    <div class="w-full h-px bg-amber-200/50"></div>
+                    <div class="flex gap-3 items-start">
+                      <iconify-icon icon="solar:danger-triangle-linear" class="text-amber-600 shrink-0 mt-0.5" width="16"></iconify-icon>
+                      <div>
+                        <p class="text-xs font-medium text-amber-900">
+                          Matter 5
+                        </p>
+                        <p class="text-[11px] text-amber-700 leading-tight">
+                          Description may exceed one page limit.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center justify-between pt-4 border-t border-neutral-200 mt-8">
+              <button class="px-6 py-2.5 text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors flex items-center gap-2">
+                <iconify-icon icon="solar:arrow-left-linear" width="16"></iconify-icon>
+                Back to Dashboard
+              </button>
+              <div class="flex items-center gap-3"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div id="pdf-panel-backdrop" onclick="togglePdfPanel()" class="fixed inset-0 bg-neutral-900/20 backdrop-blur-sm z-[60] transition-opacity duration-300 opacity-0 pointer-events-none"></div>
+    <div id="pdf-panel" class="fixed top-0 right-0 bottom-0 w-full sm:w-[600px] bg-white shadow-2xl z-[70] transform translate-x-full transition-transform duration-300 ease-in-out border-l border-neutral-200 flex flex-col">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-neutral-100 bg-white">
+        <h3 class="font-semibold text-neutral-900">Submission PDF Preview</h3>
+        <button onclick="togglePdfPanel()" class="p-2 hover:bg-neutral-100 rounded-lg text-neutral-500 transition-colors">
+          <iconify-icon icon="solar:close-circle-linear" width="24"></iconify-icon>
+        </button>
+      </div>
+      <div class="flex-1 bg-neutral-100 p-6 overflow-hidden relative">
+        <div class="w-full h-full bg-white shadow-sm border border-neutral-200 rounded-lg flex flex-col overflow-hidden">
+          <div class="h-12 border-b border-neutral-100 flex items-center px-4 gap-4 bg-neutral-50 rounded-t-lg shrink-0">
+            <div class="flex items-center gap-2">
+              <div class="w-3 h-3 rounded-full bg-red-400"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+              <div class="w-3 h-3 rounded-full bg-green-400"></div>
+            </div>
+            <div class="flex-1 text-center text-xs text-neutral-400 font-medium truncate">
+              submission_draft_v2.pdf
+            </div>
+            <div class="w-12"></div>
+          </div>
+          <div class="flex-1 flex items-center justify-center p-8 overflow-y-auto bg-neutral-50/50">
+            <div class="w-full max-w-sm aspect-[1/1.4] bg-white shadow-md border border-neutral-100 p-8 space-y-4">
+              <div class="h-4 w-3/4 bg-neutral-100 rounded"></div>
+              <div class="space-y-2">
+                <div class="h-2 w-full bg-neutral-100 rounded"></div>
+                <div class="h-2 w-full bg-neutral-100 rounded"></div>
+                <div class="h-2 w-5/6 bg-neutral-100 rounded"></div>
+              </div>
+              <div class="h-32 w-full bg-neutral-50 rounded border border-dashed border-neutral-200 flex items-center justify-center text-xs text-neutral-400">
+                [PDF Content Placeholder]
+              </div>
+              <div class="space-y-2">
+                <div class="h-2 w-full bg-neutral-100 rounded"></div>
+                <div class="h-2 w-full bg-neutral-100 rounded"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+</body></html>

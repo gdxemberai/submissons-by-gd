@@ -1,0 +1,188 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap');
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --primary: #FF5E00;
+  --primary-hover: #e55500;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-serif: 'Newsreader', Georgia, serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Selection */
+::selection {
+  background-color: #FF5E00;
+  color: white;
+}
+
+/* Hide scrollbar for main content */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Sidebar Expansion Logic */
+#sidebar {
+  transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+#main-wrapper {
+  transition: padding-left 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+body.has-expanded-sidebar #sidebar {
+  width: 16rem;
+}
+body.has-expanded-sidebar #main-wrapper {
+  padding-left: 16rem;
+}
+
+/* Sidebar Items */
+body.has-expanded-sidebar #sidebar .sidebar-item {
+  justify-content: flex-start !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+body.has-expanded-sidebar #sidebar .nav-label {
+  position: static !important;
+  opacity: 1 !important;
+  background-color: transparent !important;
+  color: inherit !important;
+  box-shadow: none !important;
+  padding: 0 0 0 12px !important;
+  pointer-events: auto !important;
+  display: inline-block !important;
+  white-space: nowrap;
+}
+
+/* Sidebar Header */
+#collapse-trigger {
+  display: none;
+}
+#expand-trigger {
+  display: flex;
+  opacity: 0;
+  pointer-events: auto;
+}
+#logo-wrapper:hover #expand-trigger {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+body.has-expanded-sidebar #sidebar-header {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  justify-content: space-between;
+}
+body.has-expanded-sidebar #collapse-trigger {
+  display: block;
+}
+body.has-expanded-sidebar #expand-trigger {
+  display: none !important;
+  pointer-events: none;
+}
+body.has-expanded-sidebar #logo-wrapper {
+  pointer-events: none;
+}
+
+/* Sidebar Animations */
+#sidebar .nav-label {
+  transition: opacity 0s;
+}
+#sidebar .sidebar-item:hover .nav-label {
+  transition: opacity 0.3s;
+}
+body.has-expanded-sidebar #sidebar .nav-label {
+  transition: opacity 0.3s ease 0.15s !important;
+}
+body.has-expanded-sidebar #sidebar-bottom-actions {
+  align-items: stretch !important;
+}
+body.has-expanded-sidebar #sidebar-user-profile {
+  margin-left: 1rem;
+}
+
+/* Custom form styles */
+select {
+  background-image: none;
+}
+
+/* Custom checkbox */
+.custom-checkbox:checked {
+  background-color: #FF5E00;
+  border-color: #FF5E00;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  width: 2.25rem;
+  height: 1.25rem;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 1rem;
+  height: 1rem;
+  background-color: white;
+  border-radius: 9999px;
+  transition: transform 0.2s;
+}
+
+.toggle-switch.active {
+  background-color: #FF5E00;
+}
+
+.toggle-switch.active::after {
+  transform: translateX(1rem);
+}
+
+/* Modal Transition */
+.modal-backdrop {
+  transition: opacity 0.2s ease-in-out;
+}
+
+.modal-panel {
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+/* Grid pattern background */
+.grid-pattern {
+  background-image: linear-gradient(to right, #8080800a 1px, transparent 1px),
+    linear-gradient(to bottom, #8080800a 1px, transparent 1px);
+  background-size: 24px 24px;
+}

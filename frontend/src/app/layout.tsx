@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
+import { AuthProvider } from "@/context/AuthContext";
+import AuthWrapper from "@/components/AuthWrapper";
 
 export const metadata: Metadata = {
   title: "Legal Submission Automator",
@@ -21,12 +22,9 @@ export default function RootLayout({
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white"></div>
         </div>
 
-        <Sidebar />
-
-        {/* Content Wrapper */}
-        <div id="main-wrapper" className="flex flex-1 pl-[72px] transition-all duration-300 h-screen">
-          {children}
-        </div>
+        <AuthProvider>
+          <AuthWrapper>{children}</AuthWrapper>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -2,8 +2,8 @@
 
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 
 interface NavItem {
   href: string;
@@ -19,6 +19,8 @@ const navItems: NavItem[] = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, logout } = useAuth();
 
   const toggleSidebar = () => {
     document.body.classList.toggle('has-expanded-sidebar');
@@ -29,6 +31,16 @@ export default function Sidebar() {
       return pathname === '/';
     }
     return pathname.startsWith(href);
+  };
+
+  const handleLogout = () => {
+    logout();
+    router.push('/login');
+  };
+
+  // Get initials from username
+  const getInitials = (username: string) => {
+    return username.slice(0, 2).toUpperCase();
   };
 
   return (
@@ -95,20 +107,32 @@ export default function Sidebar() {
       </div>
 
       {/* Bottom Actions */}
-      <div className="flex flex-col items-center gap-4 w-full px-2" id="sidebar-bottom-actions">
-        {/* Profile */}
+      <div className="flex flex-col items-center gap-3 w-full px-2" id="sidebar-bottom-actions">
+        {/* Logout Button */}
         <button
-          className="relative mt-2 w-9 h-9 rounded-full overflow-hidden ring-2 ring-transparent hover:ring-[#FF5E00]/20 transition-all shrink-0"
-          id="sidebar-user-profile"
+          onClick={handleLogout}
+          className="group relative flex items-center justify-center p-2.5 rounded-lg text-neutral-400 hover:text-red-500 hover:bg-red-50 transition-all"
+          title="Logout"
         >
-          <Image
-            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-            alt="User Profile"
-            width={36}
-            height={36}
-            className="w-full h-full object-cover"
-          />
+          <Icon icon="solar:logout-2-linear" width={22} height={22} />
+          <span className="nav-label absolute left-14 px-2 py-1 bg-neutral-900 text-white font-normal rounded opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none z-50 shadow-lg transition-opacity duration-300 text-xs">
+            Logout
+          </span>
         </button>
+
+        {/* Profile */}
+        <div
+          className="relative w-9 h-9 rounded-full overflow-hidden ring-2 ring-transparent hover:ring-[#FF5E00]/20 transition-all shrink-0 bg-linear-to-br from-[#FF5E00] to-[#FF8040] flex items-center justify-center cursor-pointer group"
+          id="sidebar-user-profile"
+          title={user?.username || 'User'}
+        >
+          <span className="text-white text-xs font-semibold">
+            {user ? getInitials(user.username) : 'U'}
+          </span>
+          <span className="nav-label absolute left-14 px-2 py-1 bg-neutral-900 text-white font-normal rounded opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none z-50 shadow-lg transition-opacity duration-300 text-xs">
+            {user?.username || 'User'}
+          </span>
+        </div>
       </div>
     </nav>
   );

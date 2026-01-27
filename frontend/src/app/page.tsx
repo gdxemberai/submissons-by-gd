@@ -212,7 +212,7 @@ export default function Dashboard() {
       </header>
 
       {/* Filters & Stats Bar */}
-      <div className="flex-none px-10 py-4 bg-white/30 backdrop-blur-sm border-b border-neutral-200/50 flex items-center justify-between gap-4">
+      <div className="flex-none px-10 py-4 bg-white border-b border-neutral-200/50 flex items-center justify-between gap-4 relative z-30">
         <div className="flex items-center gap-3 w-full">
           {/* Search */}
           <div className="relative group w-72">
@@ -285,7 +285,7 @@ export default function Dashboard() {
 
             {/* Filter Dropdown */}
             {showFilterDropdown && (
-              <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-neutral-200 z-50 overflow-hidden">
+              <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-2xl border border-neutral-200 overflow-hidden" style={{ zIndex: 9999 }}>
                 <div className="p-4 border-b border-neutral-100">
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-sm font-semibold text-neutral-900">Filters</span>

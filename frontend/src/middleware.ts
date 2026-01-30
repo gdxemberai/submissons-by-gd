@@ -24,6 +24,22 @@ function isApiRoute(pathname: string): boolean {
   return pathname.startsWith('/api');
 }
 
+// Get the actual external URL (handles proxy/load balancer scenarios)
+function getExternalUrl(request: NextRequest): string {
+  // Check for forwarded headers (set by proxies/load balancers)
+  const forwardedHost = request.headers.get('x-forwarded-host');
+  const forwardedProto = request.headers.get('x-forwarded-proto') || 'https';
+
+  if (forwardedHost) {
+    // Use forwarded headers to construct the external URL
+    const { pathname, search } = request.nextUrl;
+    return `${forwardedProto}://${forwardedHost}${pathname}${search}`;
+  }
+
+  // Fallback to request.url if no forwarded headers
+  return request.url;
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -51,8 +67,8 @@ export function middleware(request: NextRequest) {
       );
     }
 
-    // For page routes, redirect to login
-    const currentUrl = request.url;
+    // For page routes, redirect to login using external URL
+    const currentUrl = getExternalUrl(request);
     const redirectUrl = buildLoginRedirectUrl(currentUrl);
     return NextResponse.redirect(redirectUrl);
   }

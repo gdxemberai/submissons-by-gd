@@ -108,6 +108,20 @@ Clear cookie (domain=.ember.new, path=/, expires=past)
 Redirect to gibson.ember.new
 ```
 
+## Proxy/Load Balancer Considerations
+
+When deployed behind a proxy or load balancer, the middleware may see internal URLs (e.g., `localhost:10000`) instead of the external domain. To fix this:
+
+1. Check for `x-forwarded-host` header (contains the original host)
+2. Check for `x-forwarded-proto` header (contains `http` or `https`)
+3. If present, construct the URL using these headers instead of `request.url`
+
+```
+External URL = {x-forwarded-proto}://{x-forwarded-host}{pathname}{search}
+```
+
+This ensures the `returnUrl` parameter contains the correct external domain (e.g., `https://app.ember.new/`) rather than the internal address.
+
 ## Important Notes
 
 1. **Never write the auth cookie** - only `gibson.ember.new` creates it
@@ -115,3 +129,4 @@ Redirect to gibson.ember.new
 3. **Use Base64url decoding** - standard Base64 won't work (different character set)
 4. **Set cookie domain correctly on logout** - must be `.ember.new` to clear the cross-domain cookie
 5. **Include returnUrl parameter** - so users return to the correct page after login
+6. **Handle forwarded headers** - use `x-forwarded-host` and `x-forwarded-proto` when behind a proxy
